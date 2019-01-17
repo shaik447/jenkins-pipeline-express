@@ -1,14 +1,15 @@
 node {
-    agent{
-        docker {
-            args '-p 4000:3000 --name jenkinstest-${BUILD_NUMBER}'
-            image 'node:10.14'
-        }
+    def container
+    stage{
+        container=docker.image('node:10.14').run('-p 4000:3000 --name jenkinstest-${BUILD_NUMBER}')
     } 
-    // stage('Checkout') {
-    //     echo 'Getting source code...'
-    //     checkout scm
-    // }
+
+    stage('Checkout') {
+        sh 'mkdir -p /usr/src'
+        sh 'cd /usr/src'
+        echo 'Getting source code...'
+        checkout scm
+    }
 
     stage('Build') {
         echo 'Building dependencies...'
