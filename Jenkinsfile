@@ -1,6 +1,6 @@
 node {
     def container
-    stage{
+    stage('buildimage'){
         container=docker.image('node:10.14').run('-p 4000:3000 --name jenkinstest-${BUILD_NUMBER}')
     } 
 
