@@ -8,6 +8,7 @@ node {
             checkout scm
             echo 'Building dependencies...'
         sh 'npm i'
+        sh 'node index.js'
         echo 'Testing...'
         sh 'npm test'
         }
