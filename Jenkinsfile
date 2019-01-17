@@ -1,4 +1,4 @@
-node('testing') {
+node {
     agent{
         docker {
             args '-p 4000:3000 --name jenkinstest-${BUILD_NUMBER}'
