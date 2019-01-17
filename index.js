@@ -2,15 +2,15 @@ const express = require("express");
 const utils = require("./controllers/utils");
 const app = express();
 
-const envOne = process.env.VARIABLE_1;
-const envTwo = process.env.VARIABLE_2;
+const envOne = 20;
+const envTwo = 10;
 
 app.get("/", function(req, res) {
   res.send("Hello World!");
 });
 
 app.get("/add", function(req, res) {
-  res.send(utils.add(envOne, envTwo));
+  res.send(`this is an addition ${utils.add(envOne, envTwo)}`);
 });
 
 app.get("/divide", function(req, res) {

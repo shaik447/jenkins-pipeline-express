@@ -1,14 +1,14 @@
 node('testing') {
-    stage('Initialize') {
-        echo 'Initializing...'
-        def node = tool name: 'Node-7.4.0', type: 'jenkins.plugins.nodejs.tools.NodeJSInstallation'
-        env.PATH = "${node}/bin:${env.PATH}"
-    }
-
-    stage('Checkout') {
-        echo 'Getting source code...'
-        checkout scm
-    }
+    agent{
+        docker {
+            args '-p 4000:3000 --name jenkinstest-${BUILD_NUMBER}'
+            image 'node:10.14'
+        }
+    } 
+    // stage('Checkout') {
+    //     echo 'Getting source code...'
+    //     checkout scm
+    // }
 
     stage('Build') {
         echo 'Building dependencies...'
@@ -33,46 +33,34 @@ node('testing') {
     }
 }
 
-node('staging') {
-    stage('Initialize'){
-        echo 'Initializing...'
-        def node = tool name: 'Node-7.4.0', type: 'jenkins.plugins.nodejs.tools.NodeJSInstallation'
-        env.PATH = "${node}/bin:${env.PATH}"
+// node('staging') {
+//     stage('Checkout') {
+//         echo 'Getting source code...'
+//         checkout scm
+//     }
 
-        sh "node -v"
+//     stage('PM2 Install') {
+//         echo 'Installing PM2 to run application as daemon...'
+//         sh "npm install pm2 -g"
+//     }
 
-        // set environment variables
-        env.VARIABLE_1="10"
-        env.VARIABLE_2="7"
-    }
+//     stage('Build') {
+//         echo 'Building dependencies...'
+//         sh 'npm i'
+//     }
 
-    stage('Checkout') {
-        echo 'Getting source code...'
-        checkout scm
-    }
+//     stage('Test') {
+//         echo 'Testing...'
+//         sh 'npm test'
+//     }
 
-    stage('PM2 Install') {
-        echo 'Installing PM2 to run application as daemon...'
-        sh "npm install pm2 -g"
-    }
-
-    stage('Build') {
-        echo 'Building dependencies...'
-        sh 'npm i'
-    }
-
-    stage('Test') {
-        echo 'Testing...'
-        sh 'npm test'
-    }
-
-    stage('Run Application') {
-        echo 'Stopping old process to run new process...'
-        sh '''
-        npm run pm2-stop
-        npm run pm2-start
-        '''
-    }
-}
+//     stage('Run Application') {
+//         echo 'Stopping old process to run new process...'
+//         sh '''
+//         npm run pm2-stop
+//         npm run pm2-start
+//         '''
+//     }
+// }
 
 
